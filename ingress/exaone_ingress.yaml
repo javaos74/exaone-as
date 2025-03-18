@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: exaone-ingress
+  namespace: exaone
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.org/client-max-body-size: 10m
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: exaone.myrobots.co.kr
+    http:
+      paths:
+      - path: /v1/chat/completions
+        pathType: Prefix 
+        backend:
+          service:
+            name: vllm-server-service
+            port:
+              number: 80
+      - path: /db/
+        pathType: Prefix 
+        backend:
+          service:
+            name: chromadb-server-service
+            port:
+              number: 80

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chromadb-server
+  namespace: exaone
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chromadb-server
+  template:
+    metadata:
+      labels:
+        app: chromadb-server
+    spec:
+      containers:
+      - name: chromadb-server
+        image: registry.fitsonchips.com/uipath-demo-chromadb:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8002
+        volumeMounts:
+        - name: chromadb-data
+          mountPath: /data/chroma_db
+      volumes:
+      - name: chromadb-data
+        persistentVolumeClaim:
+          claimName: chromadb-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chromadb-server-service
+  namespace: exaone
+spec:
+  selector:
+    app: chromadb-server
+  ports:
+    - port: 8002
+      targetPort: 8002
