@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: chromadb-server
-        image: charlescr.azurecr.io/exaone/uipath-demo-chromadb:v0.0.1
+        image: charlescr.azurecr.io/exaone/uipath-demo-chromadb:v0.0.3
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8002
